@@ -58,5 +58,43 @@ else:
     fig = px.scatter(pd.DataFrame(dic),x='tahun',y='produksi',trendline='lowess',trendline_options=dict(frac=0.1))
     st.plotly_chart(fig)
 
+#--Poin (b)--
+st.header('Bagian B COKK')
 
 
+B = st.sidebar.number_input("Berapa besar negara?", min_value=1, max_value=None)
+T = st.sidebar.number_input("Tahun produksi", min_value=1971, max_value=2015)
+
+df = df_
+dfJ = df_info
+
+df = df[df['tahun']==T]
+kode_negara = df[df['tahun']==T]['kode_negara'].tolist()
+# produksi = df[df['tahun']==T]['produksi'].tolist()
+
+produksi_maks = []
+negara_pertahun = []
+
+kode_negara = list(dict.fromkeys(kode_negara))
+for kode in kode_negara:
+    try:
+        produksi = df[df['kode_negara']==kode]['produksi'].tolist()
+        negara = dfJ[dfJ['alpha-3']==kode]['name'].tolist()[0]
+        produksi_maks.append(max(produksi))
+        negara_pertahun.append(negara)
+    except:
+        continue
+        
+dic = {'negara':negara_pertahun,'produksi_maks':produksi_maks}
+df__ = pd.DataFrame(dic)
+df__ = df__.sort_values('produksi_maks',ascending=False).reset_index()
+
+plt.clf() # clear the figure
+
+#tulisan nanti lu aja ya, gua update ke github dulu
+
+plt.title('{B} Negara dengan Produksi Terbesar pada Tahun {T}'.format(B=B,T=T))
+plt.bar(df__['negara'][:B],df__['produksi_maks'][:B])
+plt.xlabel('negara')
+plt.ylabel('produksi_maksimum')
+st.pyplot(plt)
