@@ -104,3 +104,47 @@ plt.ylabel('produksi_maksimum')
 
 st.write('Input banyak negara dan tahun di kiri')
 st.pyplot(plt)
+
+#--Poin (c)--
+st.write()
+st.write()
+st.header('Bagian C COKK')
+
+
+B_ = st.sidebar.number_input("Berapa besar negara (Bagian C)?", min_value=1, max_value=None)
+
+df = df_
+dfJ = df_info
+
+kode_negara = df['kode_negara'].tolist()
+kode_negara = list(dict.fromkeys(kode_negara))
+
+produksi_total = []
+negara_ = []
+
+for kode in kode_negara:
+    try:
+        produksi = df[df['kode_negara']==kode]['produksi'].tolist()
+        negara = dfJ[dfJ['alpha-3']==kode]['name'].tolist()[0]
+        produksi_total.append(np.sum(np.array(produksi)))
+        negara_.append(negara)
+    except:
+        continue
+        
+dic = {'negara':negara_,'produksi_total':produksi_total}
+df__ = pd.DataFrame(dic)
+df__ = df__.sort_values('produksi_total',ascending=False).reset_index()
+
+plt.clf() # clear the figure
+
+#tulisan nanti lu aja ya, gua update ke github dulu
+
+plt.title('{B} Negara dengan Produksi Terbesar Kumulatif'.format(B=B_))
+plt.bar(df__['negara'][:B_],df__['produksi_total'][:B_],width=0.9, bottom=None, align="center",
+            color="lightblue", edgecolor="aquamarine", data=None, zorder=3)
+plt.grid(True, color="grey", linewidth="0.7", linestyle="-.", zorder=0)
+plt.xlabel('negara')
+plt.ylabel('produksi_total')
+
+st.write('Input banyak negara')
+st.pyplot(plt)
