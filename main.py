@@ -148,3 +148,90 @@ plt.ylabel('produksi_total')
 
 st.write('Input banyak negara')
 st.pyplot(plt)
+
+#--Poin (d)--
+st.write()
+st.write()
+st.header('Bagian D COKK')
+
+T_ = st.sidebar.number_input("Summary Tahun Produksi", min_value=1971, max_value=2015)
+
+df = ch_.dataFrame
+dfJ = jh_.dataFrame
+
+tahun = list(dict.fromkeys(df['tahun'].tolist()))
+
+dic_maks = {'negara':[],
+            'kode_negara':[],
+            'region':[],
+            'sub_region':[],
+            'produksi':[],
+            'tahun':tahun}
+dic_min = {'negara':[],
+            'kode_negara':[],
+            'region':[],
+            'sub_region':[],
+            'produksi':[],
+            'tahun':tahun}
+dic_zero = {'negara':[],
+            'kode_negara':[],
+            'region':[],
+            'sub_region':[],
+            'produksi':[],
+            'tahun':tahun}
+
+for t in tahun:
+    df_per_tahun = df[df['tahun']==t]
+    produksi = np.array(df_per_tahun['produksi'].tolist())
+    maks_prod = max(produksi)
+    min_prod = min([p for p in produksi if p != 0])
+    zero_prod = min([p for p in produksi if p == 0])
+    # maksimum
+    kode_negara = df_per_tahun[df_per_tahun['produksi']==maks_prod]['kode_negara'].tolist()[0]
+    if kode_negara == 'WLD':
+        kode_negara = 'WLF'
+    dic_maks['negara'].append(dfJ[dfJ['alpha-3']==kode_negara]['name'].tolist()[0])
+    dic_maks['kode_negara'].append(kode_negara)
+    dic_maks['region'].append(dfJ[dfJ['alpha-3']==kode_negara]['region'].tolist()[0])
+    dic_maks['sub_region'].append(dfJ[dfJ['alpha-3']==kode_negara]['sub-region'].tolist()[0])
+    dic_maks['produksi'].append(maks_prod)
+    # minimum != 0
+    kode_negara = df_per_tahun[df_per_tahun['produksi']==min_prod]['kode_negara'].tolist()[0]
+    if kode_negara == 'WLD':
+        kode_negara = 'WLF'
+    dic_min['negara'].append(dfJ[dfJ['alpha-3']==kode_negara]['name'].tolist()[0])
+    dic_min['kode_negara'].append(kode_negara)
+    dic_min['region'].append(dfJ[dfJ['alpha-3']==kode_negara]['region'].tolist()[0])
+    dic_min['sub_region'].append(dfJ[dfJ['alpha-3']==kode_negara]['sub-region'].tolist()[0])
+    dic_min['produksi'].append(min_prod)
+    # zero == 0
+    kode_negara = df_per_tahun[df_per_tahun['produksi']==zero_prod]['kode_negara'].tolist()[0]
+    if kode_negara == 'WLD':
+        kode_negara = 'WLF'
+    dic_zero['negara'].append(dfJ[dfJ['alpha-3']==kode_negara]['name'].tolist()[0])
+    dic_zero['kode_negara'].append(kode_negara)
+    dic_zero['region'].append(dfJ[dfJ['alpha-3']==kode_negara]['region'].tolist()[0])
+    dic_zero['sub_region'].append(dfJ[dfJ['alpha-3']==kode_negara]['sub-region'].tolist()[0])
+    dic_zero['produksi'].append(zero_prod)
+
+df_maks = pd.DataFrame(dic_maks)
+df_min = pd.DataFrame(dic_min)
+df_zero = pd.DataFrame(dic_zero)
+
+st.write('Info Produksi Maksimum Tahun ke-{}'.format(T_))
+st.write(df_maks[df_maks['tahun']==T_])
+
+st.write('Tabel Maks per Tahun')
+st.write(df_maks)
+
+st.write('Info Produksi Minimum (Not Zero) Tahun ke-{}'.format(T_))
+st.write(df_min[df_min['tahun']==T_])
+
+st.write('Tabel Min (Not Zero) per Tahun')
+st.write(df_min)
+
+st.write('Info Produksi Zero Tahun ke-{}'.format(T_))
+st.write(df_zero[df_zero['tahun']==T_])
+
+st.write('Tabel Zero per Tahun')
+st.write(df_zero)
