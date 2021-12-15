@@ -59,6 +59,8 @@ else:
     st.plotly_chart(fig)
 
 #--Poin (b)--
+st.write()
+st.write()
 st.header('Bagian B COKK')
 
 
@@ -94,7 +96,11 @@ plt.clf() # clear the figure
 #tulisan nanti lu aja ya, gua update ke github dulu
 
 plt.title('{B} Negara dengan Produksi Terbesar pada Tahun {T}'.format(B=B,T=T))
-plt.bar(df__['negara'][:B],df__['produksi_maks'][:B])
+plt.bar(df__['negara'][:B],df__['produksi_maks'][:B],width=0.9, bottom=None, align="center",
+            color="lightblue", edgecolor="aquamarine", data=None, zorder=3)
+plt.grid(True, color="grey", linewidth="0.7", linestyle="-.", zorder=0)
 plt.xlabel('negara')
 plt.ylabel('produksi_maksimum')
+
+st.write('Input banyak negara dan tahun di kiri')
 st.pyplot(plt)
